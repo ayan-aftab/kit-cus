@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Dastarkhwan – Kitchen</title>
+    <style>
+        :root {
+            --mu: #b9b3d6;
+            --cd: rgba(255, 255, 255, .08);
+            --bd: rgba(255, 255, 255, .15);
+            --gr: linear-gradient(135deg, #ff7a18, #ff3d6e)
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        [hidden] {
+            display: none !important
+        }
+
+        body {
+            margin: 0;
+            color: #fff;
+            font: 16px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif;
+            background: linear-gradient(135deg, #0d0820, #1d0f3d, #32103f, #0d0820);
+            background-size: 300% 300%;
+            animation: bg 18s ease infinite;
+            min-height: 100vh
+        }
+
+        button,
+        input {
+            font: inherit;
+            color: inherit
+        }
+
+        button {
+            cursor: pointer
+        }
+
+        input {
+            background: rgba(255, 255, 255, .1);
+            border: 1px solid var(--bd);
+            border-radius: 12px;
+            padding: 11px;
+            outline: 0
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: calc(12px + env(safe-area-inset-top, 0px)) 16px 12px;
+            background: rgba(0, 0, 0, .35);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--bd);
+            position: sticky;
+            top: 0;
+            z-index: 5
+        }
+
+        h1 {
+            font: 800 1.2rem Georgia, serif;
+            margin: 0
+        }
+
+        h2 {
+            margin: 0;
+            font: 800 1.3rem Georgia, serif
+        }
+
+        .mu {
+            color: var(--mu);
+            font-size: .85rem
+        }
+
+        .cnt {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            font-size: .85rem;
+            flex-wrap: wrap
+        }
+
+        .cnt b {
+            background: var(--cd);
+            padding: 3px 10px;
+            border-radius: 99px
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px
+        }
+
+        .wr {
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            margin: 8px 0
+        }
+
+        .gate {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .gate form {
+            display: flex;
+            gap: 10px;
+            flex-direction: column;
+            width: 270px;
+            text-align: center;
+            padding: 24px;
+            border-radius: 22px;
+            background: var(--cd);
+            border: 1px solid var(--bd);
+            animation: glow 2.4s infinite
+        }
+
+        .pri {
+            background: var(--gr);
+            color: #fff;
+            border: 0;
+            border-radius: 12px;
+            padding: 11px 16px;
+            font-weight: 800
+        }
+
+        .ghost {
+            background: var(--cd);
+            border: 1px solid var(--bd);
+            border-radius: 12px;
+            padding: 8px 12px
+        }
+
+        .ghost.on {
+            background: var(--gr);
+            border-color: transparent
+        }
+
+        .kg {
+            display: grid;
+            grid-template-columns: 330px 1fr;
+            gap: 14px;
+            padding: 14px;
+            max-width: 1150px;
+            margin: 0 auto
+        }
+
+        .li {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 11px 13px;
+            margin-bottom: 10px;
+            border: 1px solid var(--bd);
+            border-radius: 16px;
+            background: var(--cd);
+            position: relative
+        }
+
+        .li.act {
+            border-color: #ff7a18;
+            box-shadow: 0 0 0 2px #ff7a18 inset
+        }
+
+        .li.sv {
+            opacity: .5
+        }
+
+        .slide {
+            animation: slide .4s
+        }
+
+        .li.al {
+            border-color: #f03e3e;
+            animation: glowr 1.4s infinite
+        }
+
+        .pv {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 80%;
+            font-size: .85rem
+        }
+
+        .al-t {
+            color: #ff8787;
+            font-weight: 800
+        }
+
+        .dot {
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            min-width: 22px;
+            height: 22px;
+            border-radius: 11px;
+            background: #2b8a3e;
+            font-size: .75rem;
+            text-align: center;
+            line-height: 22px;
+            animation: pulse 1.4s infinite
+        }
+
+        .badge {
+            padding: 2px 10px;
+            border-radius: 99px;
+            font-size: .78rem;
+            background: rgba(255, 255, 255, .15);
+            white-space: nowrap
+        }
+
+        .b-new {
+            background: var(--gr);
+            animation: pulse 1.4s infinite
+        }
+
+        .b-preparing {
+            background: #ffd43b;
+            color: #1a1a1a
+        }
+
+        .b-ready,
+        .b-served,
+        .paid {
+            background: #2b8a3e
+        }
+
+        .unpaid {
+            background: #e8590c
+        }
+
+        .det {
+            background: var(--cd);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--bd);
+            border-radius: 20px;
+            padding: 14px;
+            min-width: 0
+        }
+
+        .alert {
+            background: rgba(240, 62, 62, .2);
+            border: 1px solid #f03e3e;
+            border-radius: 14px;
+            padding: 10px 12px;
+            margin: 10px 0;
+            animation: shake .6s, glowr 1.4s infinite
+        }
+
+        .alert button {
+            background: #f03e3e;
+            color: #fff;
+            border: 0;
+            border-radius: 10px;
+            padding: 7px 14px;
+            font-weight: 800;
+            margin-top: 6px
+        }
+
+        .tabs {
+            display: flex;
+            gap: 6px;
+            margin: 10px 0
+        }
+
+        .tabs button {
+            flex: 1;
+            padding: 9px;
+            border-radius: 12px;
+            border: 1px solid var(--bd);
+            background: var(--cd);
+            font-weight: 700;
+            position: relative
+        }
+
+        .tabs button.on {
+            background: var(--gr);
+            border-color: transparent
+        }
+
+        .nb {
+            background: #f03e3e;
+            border-radius: 99px;
+            font-size: .7rem;
+            padding: 0 6px;
+            margin-left: 4px;
+            animation: pulse 1.2s infinite
+        }
+
+        .it {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--bd)
+        }
+
+        .tl {
+            width: 62px;
+            height: 62px;
+            border-radius: 16px;
+            background: var(--gr);
+            display: grid;
+            place-items: center;
+            font-size: 2rem;
+            position: relative;
+            overflow: hidden;
+            flex: none
+        }
+
+        .tl img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .qb {
+            background: #fff;
+            color: #c2185b;
+            border-radius: 10px;
+            padding: 2px 10px;
+            font-size: 1.1rem
+        }
+
+        .log {
+            height: calc(100vh - 380px);
+            min-height: 260px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: 10px;
+            background: rgba(0, 0, 0, .3);
+            border-radius: 16px
+        }
+
+        .m {
+            max-width: 80%;
+            padding: 8px 12px;
+            border-radius: 16px;
+            overflow-wrap: anywhere
+        }
+
+        .m small {
+            display: block;
+            font-size: .7rem;
+            opacity: .7
+        }
+
+        .m.me {
+            align-self: flex-end;
+            background: var(--gr)
+        }
+
+        .m.th {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, .16)
+        }
+
+        .m.rq {
+            background: #c92a2a;
+            font-weight: 800
+        }
+
+        .pop {
+            animation: pop .3s
+        }
+
+        .quick {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin: 8px 0
+        }
+
+        .quick button {
+            border: 1px solid var(--bd);
+            background: var(--cd);
+            border-radius: 99px;
+            padding: 6px 12px;
+            font-size: .85rem
+        }
+
+        .send {
+            display: flex;
+            gap: 8px
+        }
+
+        .send input {
+            flex: 1;
+            min-width: 0
+        }
+
+        .mic {
+            width: 46px;
+            border-radius: 12px;
+            border: 1px solid var(--bd);
+            background: var(--cd)
+        }
+
+        .mic.rec {
+            background: #f03e3e
+        }
+
+        .rc {
+            background: #fffdf7;
+            color: #222;
+            border-radius: 14px;
+            padding: 16px;
+            font-family: ui-monospace, Menlo, monospace;
+            font-size: .9rem;
+            max-width: 380px
+        }
+
+        .rc h3 {
+            margin: 0;
+            text-align: center;
+            font: 800 1.2rem Georgia, serif
+        }
+
+        .rc small {
+            display: block;
+            text-align: center;
+            color: #666
+        }
+
+        .rc hr {
+            border: 0;
+            border-top: 1px dashed #999;
+            margin: 8px 0
+        }
+
+        .rc .ln {
+            display: flex;
+            justify-content: space-between
+        }
+
+        .rc .tt {
+            font-size: 1.1rem
+        }
+
+        .rc .ct {
+            text-align: center;
+            margin: 8px 0 0
+        }
+
+        @keyframes bg {
+
+            0%,
+            100% {
+                background-position: 0 50%
+            }
+
+            50% {
+                background-position: 100% 50%
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 122, 24, .6)
+            }
+
+            100% {
+                box-shadow: 0 0 0 10px rgba(255, 122, 24, 0)
+            }
+        }
+
+        @keyframes glow {
+            50% {
+                box-shadow: 0 0 28px rgba(255, 61, 110, .45)
+            }
+        }
+
+        @keyframes glowr {
+            50% {
+                box-shadow: 0 0 18px rgba(240, 62, 62, .7)
+            }
+        }
+
+        @keyframes pop {
+            from {
+                transform: scale(.85);
+                opacity: 0
+            }
+
+            to {
+                transform: none;
+                opacity: 1
+            }
+        }
+
+        @keyframes slide {
+            from {
+                transform: translateX(-24px);
+                opacity: 0
+            }
+
+            to {
+                transform: none;
+                opacity: 1
+            }
+        }
+
+        @keyframes shake {
+            20% {
+                transform: translateX(-5px)
+            }
+
+            40% {
+                transform: translateX(5px)
+            }
+
+            60% {
+                transform: translateX(-3px)
+            }
+        }
+
+        @media (max-width:780px) {
+            .kg {
+                grid-template-columns: 1fr
+            }
+
+            .kg .det {
+                display: none
+            }
+
+            .kg.open .list {
+                display: none
+            }
+
+            .kg.open .det {
+                display: block
+            }
+
+            .log {
+                height: calc(100vh - 430px)
+            }
+        }
+
+        @media (min-width:781px) {
+            .back {
+                display: none
+            }
+        }
+
+        @media (prefers-reduced-motion:reduce) {
+            * {
+                animation: none !important
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>👨‍🍳 Kitchen · Live Orders</h1>
+        <div class="cnt"><span id="cnt"></span><button class="ghost on" id="vv">🔊 Voice alerts</button></div>
+    </header>
+    <div class="gate" id="gate">
+        <form id="pf">
+            <h2>Staff login</h2><input id="pin" type="password" placeholder="Password" autocomplete="off"><button
+                class="pri">Open kitchen</button><span class="mu" id="pe"></span>
+        </form>
+    </div>
+
+    <div class="kg" id="kg" hidden>
+        <aside class="list" id="list"></aside>
+        <section class="det">
+            <p class="mu" id="empty">Select a table to see its order, bill and chat.</p>
+            <div id="body" hidden>
+                <button class="ghost back" id="back">← Tables</button>
+                <div class="row" style="margin-top:6px">
+                    <h2 id="t"></h2><span class="badge" id="b"></span>
+                </div>
+                <p id="eta" style="margin:6px 0 0;font-weight:700"></p>
+                <div id="al"></div>
+                <div class="tabs"><button class="on" data-t="order">🍽️ Order</button><button data-t="bill">🧾 Bill
+                        <span id="pb"></span></button><button data-t="chat">💬 Chat<span class="nb" id="nb"
+                            hidden></span></button></div>
+                <div id="p-order">
+                    <div id="its"></div>
+                    <div class="row wr"><button class="ghost" data-s="preparing">👨‍🍳 Preparing</button><button
+                            class="ghost" data-s="ready">🛎️ Ready</button><button class="ghost" data-s="served">✅
+                            Served</button></div>
+                    <div class="row wr"><span class="mu">Time:</span><button class="ghost" data-m="10">10
+                            min</button><button class="ghost" data-m="15">15 min</button><button class="ghost"
+                            data-m="20">20 min</button><button class="ghost" data-m="30">30 min</button></div>
+                    <div id="rates"></div>
+                </div>
+                <div id="p-bill" hidden>
+                    <div id="billBox"></div>
+                    <div class="row wr"><span class="mu">Mark paid:</span><button class="ghost" data-p="cash">💵
+                            Cash</button><button class="ghost" data-p="card">💳 Card</button><button class="ghost"
+                            data-p="easypaisa">📱 Easypaisa</button><button class="ghost" data-p="jazzcash">📱
+                            JazzCash</button></div>
+                    <div class="row wr"><button class="ghost" data-p="unpaid">↩️ Mark unpaid</button><button class="pri"
+                            id="prt">🖨️ Print bill</button></div>
+                </div>
+                <div id="p-chat" hidden>
+                    <div class="log" id="log"></div>
+                    <div class="quick"><button data-q="Order confirm ho gaya ✅">Order confirm ✅</button><button
+                            data-q="Thora aur time lagega 🙏">Thora aur time 🙏</button><button
+                            data-q="Kuch aur chahiye?">Kuch aur chahiye?</button></div>
+                    <form class="send" id="form"><input id="in" placeholder="Customer ko reply…"
+                            autocomplete="off"><button type="button" class="mic" id="mic">🎤</button><button
+                            class="pri">Send</button></form>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        /* Password below. Optional Firebase Realtime DB URL in FB; empty = demo mode (same browser). Item photos: img/<id>.jpg next to this file. Password check is client-side only; use Firebase Auth for real security. */
+        const PASS = "kit987", FB = "", NAME = "Dastarkhwan", TAX = .05;
+        const ST = ["new", "preparing", "ready", "served"], LB = { new: "New", preparing: "Preparing", ready: "Ready", served: "Served" };
+        const REQ = { w: ["💧", "Pani"], s: ["🧂", "Namak / Tissue"], b: ["🧾", "Bill"], h: ["🙋", "Waiter"] }, PM = { cash: "Cash", card: "Card", easypaisa: "Easypaisa", jazzcash: "JazzCash" };
+        const $ = s => document.querySelector(s), esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"), rs = n => "Rs " + Math.round(n).toLocaleString("en-US");
+        const LS = "rest_orders", SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let orders = {}, sel = null, seen = {}, sig = "", ac, vOn = true, ann = null, tb = "order";
+        const lload = () => { try { return JSON.parse(localStorage.getItem(LS)) || {} } catch (e) { return {} } };
+        async function pull() { if (FB) { try { orders = await (await fetch(FB + "/orders.json")).json() || {} } catch (e) { } } else orders = lload() }
+        async function put(id, p) {
+            const o = orders[id] || {}; orders[id] = { ...o, ...p, msgs: { ...o.msgs, ...p.msgs } };
+            if (FB) {
+                const { msgs, ...r } = p;
+                if (Object.keys(r).length) await fetch(`${FB}/orders/${id}.json`, { method: "PATCH", body: JSON.stringify(r) });
+                if (msgs) await fetch(`${FB}/orders/${id}/msgs.json`, { method: "PATCH", body: JSON.stringify(msgs) });
+            } else { const a = lload(); a[id] = orders[id]; localStorage.setItem(LS, JSON.stringify(a)) }
+            paint()
+        }
+        const msgs = o => Object.entries(o.msgs || {}).map(([k, v]) => ({ ...v, k })).sort((a, b) => a.at - b.at);
+        const last = o => { const m = msgs(o); return Math.max(o.at, m.length ? m[m.length - 1].at : 0) };
+        function say(id, t) { t = (t || "").trim(); if (!t || !orders[id]) return; const at = Date.now(); put(id, { ks: at, msgs: { ["m" + at + Math.random().toString(36).slice(2, 5)]: { f: "k", t, at } } }) }
+        function pending(o) { const ms = msgs(o), r = [...ms].reverse().find(m => m.f === "c" && m.r); return r && !ms.some(m => m.f === "k" && m.at > r.at) ? r : null }
+        const eta = o => o.st === "served" ? "Served" : o.st === "ready" ? "Ready — waiting to be served" : o.ready ? `Promised: ${Math.max(0, Math.ceil((o.ready - Date.now()) / 6e4))} min left` : "No time promised yet";
+        function beep() { try { ac = ac || new AudioContext(); const o = ac.createOscillator(), g = ac.createGain(); o.connect(g); g.connect(ac.destination); o.frequency.value = 880; g.gain.setValueAtTime(.25, ac.currentTime); g.gain.exponentialRampToValueAtTime(.001, ac.currentTime + .6); o.start(); o.stop(ac.currentTime + .6) } catch (e) { } }
+        const talk = t => { if (vOn && window.speechSynthesis) speechSynthesis.speak(new SpeechSynthesisUtterance(t)) };
+        function announce() {
+            const ids = Object.keys(orders); let first = ann === null, hit = false; if (first) ann = new Set();
+            ids.forEach(id => {
+                const o = orders[id]; if (!ann.has(id)) { ann.add(id); if (!first) { hit = true; talk(`New order from table ${o.table}. ${o.items.map(x => x.q + " " + x.n).join(", ")}`) } }
+                msgs(o).forEach(m => { if (m.f === "c" && !ann.has(m.k)) { ann.add(m.k); if (!first) { hit = true; talk(m.r ? `Table ${o.table} needs ${REQ[m.r][1]}` : `Table ${o.table} says: ${m.t}`) } } })
+            });
+            if (hit) beep()
+        }
+        const tile = x => `<div class="tl">${x.e}<img src="img/${x.id}.jpg" alt="" onerror="this.remove()"></div>`;
+        function bill(o) {
+            const d = new Date(o.at), p = o.pay || {};
+            return `<div class="rc"><h3>${NAME}</h3><small>Bill #${o.bill} · Table ${o.table}<br>${d.toLocaleDateString()} ${d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</small><hr>` +
+                o.items.map(x => `<div class="ln"><span>${x.q}× ${esc(x.n)}</span><b>${rs(x.q * x.p)}</b></div>`).join("") +
+                `<hr><div class="ln"><span>Subtotal</span><span>${rs(o.sub)}</span></div><div class="ln"><span>Tax (${Math.round(TAX * 100)}%)</span><span>${rs(o.tax)}</span></div><div class="ln tt"><span>TOTAL</span><b>${rs(o.total)}</b></div><p class="ct"><span class="badge ${p.s === "paid" ? "paid" : "unpaid"}" style="color:#fff">${p.s === "paid" ? "✅ PAID · " + PM[p.m] : "⏳ UNPAID" + (p.m ? " · customer chose " + PM[p.m] : "")}</span></p></div>`
+        }
+        function printBill(o) { const w = window.open("", "_blank"); if (!w) return; w.document.write(`<title>Bill ${o.bill}</title><style>body{font:14px monospace;max-width:320px;margin:20px auto}.ln{display:flex;justify-content:space-between}hr{border:0;border-top:1px dashed #000}small{display:block;text-align:center}h3{text-align:center}</style>` + bill(o)); w.document.close(); w.print() }
+        function log(el, ms) {
+            const n = el.dataset.n; if (n !== undefined && +n === ms.length) return; const old = +n || 0;
+            el.innerHTML = ms.map((m, i) => { const d = new Date(m.at); return `<div class="m ${m.f === "k" ? "me" : "th"}${m.r ? " rq" : ""}${n !== undefined && i >= old ? " pop" : ""}">${m.r ? REQ[m.r][0] + " " : ""}${esc(m.t)}<small>${d.getHours()}:${("0" + d.getMinutes()).slice(-2)}</small></div>` }).join("") || '<p class="mu">No messages yet.</p>';
+            el.dataset.n = ms.length; el.scrollTop = el.scrollHeight
+        }
+        function tab(t) { tb = t;["order", "bill", "chat"].forEach(x => $("#p-" + x).hidden = x !== t); document.querySelectorAll(".tabs button").forEach(b => b.classList.toggle("on", b.dataset.t === t)); paint(); if (t === "chat") $("#log").scrollTop = 1e9 }
+        function paint() {
+            if ($("#kg").hidden) return; announce();
+            const ids = Object.keys(orders).sort((a, b) => last(orders[b]) - last(orders[a])), cn = s => ids.filter(i => orders[i].st === s).length;
+            $("#cnt").innerHTML = `<b>New ${cn("new")}</b><b>Preparing ${cn("preparing")}</b><b>Ready ${cn("ready")}</b>`;
+            $("#list").innerHTML = ids.length ? ids.map(id => {
+                const o = orders[id], ms = msgs(o), u = ms.filter(m => m.f === "c" && m.at > (o.ks || o.at)).length, pr = pending(o), fresh = !seen[id]; seen[id] = 1, pd = o.pay && o.pay.s === "paid";
+                return `<button class="li${id === sel ? " act" : ""}${o.st === "served" && pd ? " sv" : ""}${fresh ? " slide" : ""}${pr ? " al" : ""}" data-id="${id}"><div class="row"><b>Table ${o.table}</b><span class="badge b-${o.st}">${LB[o.st]}</span></div><div style="font-size:1.3rem;margin:4px 0">${o.items.slice(0, 5).map(x => x.e).join(" ")}</div><div class="pv">${pr ? `<span class="al-t">🔔 ${REQ[pr.r][1]}</span>` : esc(ms.length ? ms[ms.length - 1].t : o.items.length + " items")}</div><div class="row"><small class="mu">${rs(o.total)} · <span style="color:${pd ? "#69db7c" : "#ffa94d"}">${pd ? "PAID" : "UNPAID"}</span></small><small class="mu">${Math.max(0, Math.floor((Date.now() - last(o)) / 6e4))} min ago</small></div>${u ? `<span class="dot">${u}</span>` : ""}</button>`
+            }).join("") : '<p class="mu">Waiting for orders… (abhi koi order nahi aaya)</p>';
+            const o = sel && orders[sel]; $("#empty").hidden = !!o; $("#body").hidden = !o; $("#kg").classList.toggle("open", !!o); if (!o) return;
+            const ms = msgs(o), un = ms.filter(m => m.f === "c" && m.at > (o.ks || o.at)).length;
+            if (tb === "chat" && un) { put(sel, { ks: Date.now() }); return }
+            const nb = $("#nb"); nb.hidden = !un || tb === "chat"; nb.textContent = un;
+            $("#t").textContent = `Table ${o.table} · ${rs(o.total)}`; const b = $("#b"); b.textContent = LB[o.st]; b.className = "badge b-" + o.st;
+            $("#eta").textContent = eta(o); $("#pb").textContent = o.pay && o.pay.s === "paid" ? "✅" : "⏳";
+            $("#its").innerHTML = o.items.map(x => `<div class="it">${tile(x)}<div style="flex:1;min-width:0"><b>${esc(x.n)}</b><div class="mu">${rs(x.p)} each</div></div><b class="qb">×${x.q}</b><b>${rs(x.q * x.p)}</b></div>`).join("");
+            const rt = o.rates || {}, ks = Object.keys(rt); $("#rates").innerHTML = ks.length ? `<p style="margin:10px 0 0"><b>⭐ Customer ratings:</b> ${o.items.filter(x => rt[x.id]).map(x => esc(x.n) + " " + "★".repeat(rt[x.id])).join(" · ")}</p>` : "";
+            const pr = pending(o); $("#al").innerHTML = pr ? `<div class="alert">🔔 Customer request: <b>${REQ[pr.r][0]} ${REQ[pr.r][1]}</b>${pr.r === "b" ? " — " + esc(pr.t) : ""}<br><button data-q="Aapka ${REQ[pr.r][1]} aa raha hai 🏃">Reply: on the way 🏃</button></div>` : "";
+            $("#billBox").innerHTML = bill(o); log($("#log"), ms)
+        }
+        function start() {
+            $("#gate").hidden = true; $("#kg").hidden = false; pull().then(paint);
+            setInterval(async () => { await pull(); const s = JSON.stringify(orders); if (s !== sig) { sig = s; paint() } }, 1500); setInterval(paint, 20000)
+        }
+        $("#pf").onsubmit = e => { e.preventDefault(); if ($("#pin").value === PASS) { try { sessionStorage.setItem("kok", "1") } catch (x) { } beep(); start() } else $("#pe").textContent = "Wrong password" };
+        document.addEventListener("click", e => {
+            const t = e.target; let b;
+            if (t.closest("#vv")) { vOn = !vOn; $("#vv").classList.toggle("on", vOn); $("#vv").textContent = vOn ? "🔊 Voice alerts" : "🔇 Voice off" }
+            else if (b = t.closest("[data-id]")) { sel = b.dataset.id; tb = "order"; $("#log").removeAttribute("data-n"); tab("order") }
+            else if (t.closest("#back")) { sel = null; paint() }
+            else if (b = t.closest("[data-t]")) tab(b.dataset.t);
+            else if (!sel) return;
+            else if (b = t.closest("[data-s]")) { put(sel, { st: b.dataset.s }); if (b.dataset.s === "ready") say(sel, "Aapka order ready hai 🛎️") }
+            else if (b = t.closest("[data-m]")) { const m = +b.dataset.m; put(sel, { ready: Date.now() + m * 6e4, st: orders[sel].st === "new" ? "preparing" : orders[sel].st }); say(sel, `Aapka order lagbhag ${m} min mein ready ho jayega 🙂`) }
+            else if (b = t.closest("[data-p]")) { const m = b.dataset.p; if (m === "unpaid") put(sel, { pay: { s: "unpaid" } }); else { put(sel, { pay: { m, s: "paid" } }); say(sel, `Payment received (${PM[m]}) ✅ Shukriya!`) } }
+            else if (b = t.closest("[data-q]")) say(sel, b.dataset.q);
+            else if (t.closest("#prt")) printBill(orders[sel]);
+            else if (t.closest("#mic")) { if (!SR) return; const r = new SR(); r.lang = "en-IN"; r.onresult = x => { $("#in").value = x.results[0][0].transcript }; r.onend = r.onerror = () => $("#mic").classList.remove("rec"); $("#mic").classList.add("rec"); r.start() }
+        });
+        $("#form").onsubmit = e => { e.preventDefault(); say(sel, $("#in").value); $("#in").value = "" };
+        try { if (sessionStorage.getItem("kok") === "1") start() } catch (e) { }
+    </script>
+</body>
+
+</html>
