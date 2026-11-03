@@ -626,7 +626,7 @@
 
     <script>
         /* Password below. Optional Firebase Realtime DB URL in FB; empty = demo mode (same browser). Item photos: img/<id>.jpg next to this file. Password check is client-side only; use Firebase Auth for real security. */
-        const PASS = "kit987", FB = "", NAME = "Dastarkhwan", TAX = .05;
+const PASS="kit987",FB="https://dasturkhuwan-1b5d3-default-rtdb.firebaseio.com",NAME="Dastarkhwan",TAX=.05;
         const ST = ["new", "preparing", "ready", "served"], LB = { new: "New", preparing: "Preparing", ready: "Ready", served: "Served" };
         const REQ = { w: ["💧", "Pani"], s: ["🧂", "Namak / Tissue"], b: ["🧾", "Bill"], h: ["🙋", "Waiter"] }, PM = { cash: "Cash", card: "Card", easypaisa: "Easypaisa", jazzcash: "JazzCash" };
         const $ = s => document.querySelector(s), esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"), rs = n => "Rs " + Math.round(n).toLocaleString("en-US");
